@@ -1,0 +1,37 @@
+error[E0659]: `test` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs-test.rs:9:3
+   |
+LL | #[test] //~ ERROR `test` is ambiguous
+   |   ^^^^
+   |
+note: `test` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs-test.rs:7:1
+   |
+LL | macro test() {}
+   | ^^^^^^^^^^^^^^^
+note: `test` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs-test.rs:9:3
+   |
+LL | #[test] //~ ERROR `test` is ambiguous
+   |   ^^^^
+
+error[E0659]: `bench` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs-test.rs:14:3
+   |
+LL | #[bench] //~ ERROR `bench` is ambiguous
+   |   ^^^^^
+   |
+note: `bench` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs-test.rs:12:1
+   |
+LL | macro bench() {}
+   | ^^^^^^^^^^^^^^^^
+note: `bench` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs-test.rs:14:3
+   |
+LL | #[bench] //~ ERROR `bench` is ambiguous
+   |   ^^^^^
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0659`.

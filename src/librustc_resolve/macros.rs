@@ -619,7 +619,19 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
                 }
                 WhereToResolve::MacroPrelude => {
                     match self.macro_prelude.get(&ident.name).cloned() {
-                        Some(binding) => Ok((binding, FromPrelude(true))),
+                        Some(binding) => {
+                            let mut result = Ok((binding, FromPrelude(true)));
+                            // HACK: Keep some built-in attributes working even if they are
+                            // shadowed by other built-in or standard library macros.
+                            // We need to come up with some more principled approach instead.
+                            if is_attr && (ident.name == "cfg" || ident.name == "thread_local") {
+                                if let Def::Macro(_, MacroKind::Bang) =
+                                        binding.def_ignoring_ambiguity() {
+                                    result = Err(Determinacy::Determined);
+                                }
+                            }
+                            result
+                        }
                         None => Err(Determinacy::Determined),
                     }
                 }
@@ -927,6 +939,32 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
                     }
                 }
             };
+        }
+
+        for &(ident, parent_expansion, parent_legacy_scope)
+                in module.builtin_attrs.borrow().iter() {
+            let resolution = if ident.name == "doc" {
+                // HACK: Some sugared doc comments in macros lose their memory about being
+                // sugared doc comments and become shadowed by other macros.
+                // We need to come up with some more principled approach instead.
+                None
+            } else {
+                self.resolve_legacy_scope(ident, parent_expansion, parent_legacy_scope, true)
+            }.or_else(|| {
+                self.resolve_lexical_macro_path_segment(ident, MacroNS, parent_expansion, true,
+                                                        true, true, ident.span)
+                                                        .map(|(binding, _)| binding).ok()
+            });
+
+            if let Some(binding) = resolution {
+                if binding.def_ignoring_ambiguity() !=
+                        Def::NonMacroAttr(NonMacroAttrKind::Builtin) {
+                    let builtin_binding = (Def::NonMacroAttr(NonMacroAttrKind::Builtin),
+                                           ty::Visibility::Public, ident.span, Mark::root())
+                                           .to_name_binding(self.arenas);
+                    self.report_ambiguity_error(ident.name, ident.span, binding, builtin_binding);
+                }
+            }
         }
     }
 

@@ -1,0 +1,88 @@
+error[E0659]: `repr` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:5:3
+   |
+LL | #[repr(C)] //~ ERROR `repr` is ambiguous
+   |   ^^^^
+   |
+note: `repr` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:3:1
+   |
+LL | macro repr() {}
+   | ^^^^^^^^^^^^^^^
+note: `repr` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:5:3
+   |
+LL | #[repr(C)] //~ ERROR `repr` is ambiguous
+   |   ^^^^
+
+error[E0659]: `repr` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:7:19
+   |
+LL | #[cfg_attr(all(), repr(C))] //~ ERROR `repr` is ambiguous
+   |                   ^^^^
+   |
+note: `repr` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:3:1
+   |
+LL | macro repr() {}
+   | ^^^^^^^^^^^^^^^
+note: `repr` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:7:19
+   |
+LL | #[cfg_attr(all(), repr(C))] //~ ERROR `repr` is ambiguous
+   |                   ^^^^
+
+error[E0659]: `cfg` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:12:3
+   |
+LL | #[cfg(all())] //~ ERROR `cfg` is ambiguous
+   |   ^^^
+   |
+note: `cfg` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:10:1
+   |
+LL | macro cfg() {}
+   | ^^^^^^^^^^^^^^
+note: `cfg` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:12:3
+   |
+LL | #[cfg(all())] //~ ERROR `cfg` is ambiguous
+   |   ^^^
+
+error[E0659]: `inline` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:41:3
+   |
+LL | #[inline] //~ ERROR `inline` is ambiguous
+   |   ^^^^^^
+   |
+note: `inline` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:39:1
+   |
+LL | macro_rules! inline { () => () }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `inline` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:41:3
+   |
+LL | #[inline] //~ ERROR `inline` is ambiguous
+   |   ^^^^^^
+
+error[E0659]: `inline` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:43:19
+   |
+LL | #[cfg_attr(all(), inline)] //~ ERROR `inline` is ambiguous
+   |                   ^^^^^^
+   |
+note: `inline` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:39:1
+   |
+LL | macro_rules! inline { () => () }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `inline` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:43:19
+   |
+LL | #[cfg_attr(all(), inline)] //~ ERROR `inline` is ambiguous
+   |                   ^^^^^^
+
+error: aborting due to 5 previous errors
+
+For more information about this error, try `rustc --explain E0659`.
