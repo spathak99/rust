@@ -1,0 +1,157 @@
+error: name `cfg` is reserved in macro namespace
+  --> $DIR/ambiguous-builtin-attrs.rs:12:7
+   |
+LL | macro cfg() {} //~ ERROR name `cfg` is reserved in macro namespace
+   |       ^^^
+
+error: name `cfg_attr` is reserved in macro namespace
+  --> $DIR/ambiguous-builtin-attrs.rs:19:7
+   |
+LL | macro cfg_attr() {} //~ ERROR name `cfg_attr` is reserved in macro namespace
+   |       ^^^^^^^^
+
+error: name `derive` is reserved in macro namespace
+  --> $DIR/ambiguous-builtin-attrs.rs:26:7
+   |
+LL | macro derive() {} //~ ERROR name `derive` is reserved in macro namespace
+   |       ^^^^^^
+
+error[E0659]: `feature` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:1:4
+   |
+LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
+   |    ^^^^^^^
+   |
+note: `feature` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:3:1
+   |
+LL | macro feature() {}
+   | ^^^^^^^^^^^^^^^^^^
+note: `feature` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:1:4
+   |
+LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
+   |    ^^^^^^^
+
+error[E0659]: `repr` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:7:3
+   |
+LL | #[repr(C)] //~ ERROR `repr` is ambiguous
+   |   ^^^^
+   |
+note: `repr` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:5:1
+   |
+LL | macro repr() {}
+   | ^^^^^^^^^^^^^^^
+note: `repr` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:7:3
+   |
+LL | #[repr(C)] //~ ERROR `repr` is ambiguous
+   |   ^^^^
+
+error[E0659]: `repr` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:9:19
+   |
+LL | #[cfg_attr(all(), repr(C))] //~ ERROR `repr` is ambiguous
+   |                   ^^^^
+   |
+note: `repr` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:5:1
+   |
+LL | macro repr() {}
+   | ^^^^^^^^^^^^^^^
+note: `repr` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:9:19
+   |
+LL | #[cfg_attr(all(), repr(C))] //~ ERROR `repr` is ambiguous
+   |                   ^^^^
+
+error[E0659]: `cfg` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:14:3
+   |
+LL | #[cfg(all())] //~ ERROR `cfg` is ambiguous
+   |   ^^^
+   |
+note: `cfg` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:12:1
+   |
+LL | macro cfg() {} //~ ERROR name `cfg` is reserved in macro namespace
+   | ^^^^^^^^^^^^^^
+note: `cfg` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:14:3
+   |
+LL | #[cfg(all())] //~ ERROR `cfg` is ambiguous
+   |   ^^^
+
+error[E0659]: `inline` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:43:3
+   |
+LL | #[inline] //~ ERROR `inline` is ambiguous
+   |   ^^^^^^
+   |
+note: `inline` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:41:1
+   |
+LL | macro_rules! inline { () => () }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `inline` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:43:3
+   |
+LL | #[inline] //~ ERROR `inline` is ambiguous
+   |   ^^^^^^
+
+error[E0659]: `inline` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:45:19
+   |
+LL | #[cfg_attr(all(), inline)] //~ ERROR `inline` is ambiguous
+   |                   ^^^^^^
+   |
+note: `inline` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:41:1
+   |
+LL | macro_rules! inline { () => () }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `inline` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:45:19
+   |
+LL | #[cfg_attr(all(), inline)] //~ ERROR `inline` is ambiguous
+   |                   ^^^^^^
+
+error[E0659]: `inline` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:48:34
+   |
+LL | fn non_macro_expanded_location<#[inline] T>() { //~ ERROR `inline` is ambiguous
+   |                                  ^^^^^^
+   |
+note: `inline` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:41:1
+   |
+LL | macro_rules! inline { () => () }
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+note: `inline` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:48:34
+   |
+LL | fn non_macro_expanded_location<#[inline] T>() { //~ ERROR `inline` is ambiguous
+   |                                  ^^^^^^
+
+error[E0659]: `repr` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:50:11
+   |
+LL |         #[repr(C)] //~ ERROR `repr` is ambiguous
+   |           ^^^^
+   |
+note: `repr` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:5:1
+   |
+LL | macro repr() {}
+   | ^^^^^^^^^^^^^^^
+note: `repr` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:50:11
+   |
+LL |         #[repr(C)] //~ ERROR `repr` is ambiguous
+   |           ^^^^
+
+error: aborting due to 11 previous errors
+
+For more information about this error, try `rustc --explain E0659`.

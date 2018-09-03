@@ -187,12 +187,30 @@ LL |     mod inner { #![macro_escape] }
    = help: consider an outer attribute, #[macro_use] mod ...
 
 warning: `repr` attribute isn't configurable with a literal
+  --> $DIR/issue-43106-gating-of-builtin-attrs.rs:63:1
+   |
+LL | #![repr                       = "3900"]
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ needs a hint
+   |
+   = note: #[warn(bad_repr)] on by default
+   = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
+   = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
+
+warning: `repr` attribute isn't configurable with a literal
+  --> $DIR/issue-43106-gating-of-builtin-attrs.rs:313:1
+   |
+LL | #[repr = "3900"]
+   | ^^^^^^^^^^^^^^^^ needs a hint
+   |
+   = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
+   = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
+
+warning: `repr` attribute isn't configurable with a literal
   --> $DIR/issue-43106-gating-of-builtin-attrs.rs:317:17
    |
 LL |     mod inner { #![repr="3900"] }
    |                 ^^^^^^^^^^^^^^^ needs a hint
    |
-   = note: #[warn(bad_repr)] on by default
    = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
    = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
 
@@ -219,24 +237,6 @@ warning: `repr` attribute isn't configurable with a literal
    |
 LL |     #[repr = "3900"] impl S { }
    |     ^^^^^^^^^^^^^^^^ needs a hint
-   |
-   = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
-   = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
-
-warning: `repr` attribute isn't configurable with a literal
-  --> $DIR/issue-43106-gating-of-builtin-attrs.rs:313:1
-   |
-LL | #[repr = "3900"]
-   | ^^^^^^^^^^^^^^^^ needs a hint
-   |
-   = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
-   = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
-
-warning: `repr` attribute isn't configurable with a literal
-  --> $DIR/issue-43106-gating-of-builtin-attrs.rs:63:1
-   |
-LL | #![repr                       = "3900"]
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ needs a hint
    |
    = help: valid hints include `#[repr(C)]`, `#[repr(packed)]`, `#[repr(rust)]` and `#[repr(transparent)]`
    = note: for more information, visit <https://doc.rust-lang.org/reference/type-layout.html>
