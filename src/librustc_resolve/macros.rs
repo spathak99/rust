@@ -1082,6 +1082,7 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
                 self.define(module, ident, MacroNS,
                             (def, vis, item.span, expansion, IsMacroExport));
             } else {
+                self.check_reserved_macro_name(ident, MacroNS);
                 self.unused_macros.insert(def_id);
             }
         } else {
