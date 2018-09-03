@@ -943,7 +943,8 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
 
         for &(ident, parent_expansion, parent_legacy_scope)
                 in module.builtin_attrs.borrow().iter() {
-            let resolution = if ident.name == "doc" {
+            let resolution = if ident.name == "doc" || ident.name == "test" ||
+                                ident.name == "thread_local" {
                 // HACK: Some sugared doc comments in macros lose their memory about being
                 // sugared doc comments and become shadowed by other macros.
                 // We need to come up with some more principled approach instead.
@@ -951,9 +952,14 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
             } else {
                 self.resolve_legacy_scope(ident, parent_expansion, parent_legacy_scope, true)
             }.or_else(|| {
-                self.resolve_lexical_macro_path_segment(ident, MacroNS, parent_expansion, true,
-                                                        true, true, ident.span)
-                                                        .map(|(binding, _)| binding).ok()
+                let binding = self.resolve_lexical_macro_path_segment(
+                    ident, MacroNS, parent_expansion, true, true, true, ident.span
+                ).map(|(binding, _)| binding).ok();
+                match binding.map(|binding| binding.def_ignoring_ambiguity()) {
+                    // HACK: More hacks necessary for bootstrapping rustc.
+                    Some(Def::Macro(_, MacroKind::Bang)) if ident.name == "warn" => None,
+                    _ => binding,
+                }
             });
 
             if let Some(binding) = resolution {
@@ -1082,7 +1088,9 @@ impl<'a, 'cl> Resolver<'a, 'cl> {
                 self.define(module, ident, MacroNS,
                             (def, vis, item.span, expansion, IsMacroExport));
             } else {
-                self.check_reserved_macro_name(ident, MacroNS);
+                if !attr::contains_name(&item.attrs, "rustc_doc_only_macro") {
+                    self.check_reserved_macro_name(ident, MacroNS);
+                }
                 self.unused_macros.insert(def_id);
             }
         } else {

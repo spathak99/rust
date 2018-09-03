@@ -16,6 +16,23 @@ error: name `derive` is reserved in macro namespace
 LL | macro derive() {} //~ ERROR name `derive` is reserved in macro namespace
    |       ^^^^^^
 
+error[E0659]: `feature` is ambiguous
+  --> $DIR/ambiguous-builtin-attrs.rs:1:4
+   |
+LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
+   |    ^^^^^^^
+   |
+note: `feature` could refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:3:1
+   |
+LL | macro feature() {}
+   | ^^^^^^^^^^^^^^^^^^
+note: `feature` could also refer to the name defined here
+  --> $DIR/ambiguous-builtin-attrs.rs:1:4
+   |
+LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
+   |    ^^^^^^^
+
 error[E0659]: `repr` is ambiguous
   --> $DIR/ambiguous-builtin-attrs.rs:7:3
    |
@@ -134,23 +151,6 @@ note: `repr` could also refer to the name defined here
    |
 LL |         #[repr(C)] //~ ERROR `repr` is ambiguous
    |           ^^^^
-
-error[E0659]: `feature` is ambiguous
-  --> $DIR/ambiguous-builtin-attrs.rs:1:4
-   |
-LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
-   |    ^^^^^^^
-   |
-note: `feature` could refer to the name defined here
-  --> $DIR/ambiguous-builtin-attrs.rs:3:1
-   |
-LL | macro feature() {}
-   | ^^^^^^^^^^^^^^^^^^
-note: `feature` could also refer to the name defined here
-  --> $DIR/ambiguous-builtin-attrs.rs:1:4
-   |
-LL | #![feature(decl_macro)] //~ ERROR `feature` is ambiguous
-   |    ^^^^^^^
 
 error: aborting due to 11 previous errors
 

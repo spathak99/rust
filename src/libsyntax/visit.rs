@@ -178,8 +178,8 @@ pub fn walk_ident<'a, V: Visitor<'a>>(visitor: &mut V, ident: Ident) {
 }
 
 pub fn walk_crate<'a, V: Visitor<'a>>(visitor: &mut V, krate: &'a Crate) {
-    visitor.visit_mod(&krate.module, krate.span, &krate.attrs, CRATE_NODE_ID);
     walk_list!(visitor, visit_attribute, &krate.attrs);
+    visitor.visit_mod(&krate.module, krate.span, &krate.attrs, CRATE_NODE_ID);
 }
 
 pub fn walk_mod<'a, V: Visitor<'a>>(visitor: &mut V, module: &'a Mod) {
@@ -217,6 +217,7 @@ pub fn walk_trait_ref<'a, V: Visitor<'a>>(visitor: &mut V, trait_ref: &'a TraitR
 }
 
 pub fn walk_item<'a, V: Visitor<'a>>(visitor: &mut V, item: &'a Item) {
+    walk_list!(visitor, visit_attribute, &item.attrs);
     visitor.visit_vis(&item.vis);
     visitor.visit_ident(item.ident);
     match item.node {
@@ -288,7 +289,6 @@ pub fn walk_item<'a, V: Visitor<'a>>(visitor: &mut V, item: &'a Item) {
         ItemKind::Mac(ref mac) => visitor.visit_mac(mac),
         ItemKind::MacroDef(ref ts) => visitor.visit_mac_def(ts, item.id),
     }
-    walk_list!(visitor, visit_attribute, &item.attrs);
 }
 
 pub fn walk_enum_def<'a, V: Visitor<'a>>(visitor: &mut V,
